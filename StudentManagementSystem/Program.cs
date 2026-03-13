@@ -2,9 +2,11 @@
 
 class Program
 {
+    // Arrays to store student data
     static string[] names = new string[10];
     static int[] ids = new int[10];
     static double[] grades = new double[10];
+    static bool[] enrolled = new bool[10]; // Enrollment status
 
     static int studentCount = 0;
 
@@ -12,6 +14,7 @@ class Program
     {
         bool running = true;
 
+        // Main menu loop using while loop and switch statement
         while (running)
         {
             Console.WriteLine("\n=== Student Management System ===");
@@ -74,21 +77,37 @@ class Program
         Console.Write("Enter student name: ");
         string name = Console.ReadLine();
 
+        // Validate and parse ID
         Console.Write("Enter student ID: ");
-        int id = int.Parse(Console.ReadLine());
-
-        Console.Write("Enter grade (0-100): ");
-        double grade = double.Parse(Console.ReadLine());
-
-        if (grade < 0 || grade > 100)
+        if (!int.TryParse(Console.ReadLine(), out int id) || id <= 0)
         {
-            Console.WriteLine("Invalid grade.");
+            Console.WriteLine("Invalid ID. Must be a positive integer.");
             return;
         }
 
+        // Check for duplicate ID
+        for (int i = 0; i < studentCount; i++)
+        {
+            if (ids[i] == id)
+            {
+                Console.WriteLine("Student ID already exists.");
+                return;
+            }
+        }
+
+        // Validate and parse grade
+        Console.Write("Enter grade (0-100): ");
+        if (!double.TryParse(Console.ReadLine(), out double grade) || grade < 0 || grade > 100)
+        {
+            Console.WriteLine("Invalid grade. Must be between 0 and 100.");
+            return;
+        }
+
+        // Add student
         names[studentCount] = name;
         ids[studentCount] = id;
         grades[studentCount] = grade;
+        enrolled[studentCount] = true; // Mark as enrolled
 
         studentCount++;
 
@@ -97,14 +116,15 @@ class Program
 
     static void ViewStudents()
     {
-        Console.WriteLine("\nID    Name      Grade    Status");
-        Console.WriteLine("----------------------------------");
+        Console.WriteLine("\nID      Name                Grade     Status    Enrolled");
+        Console.WriteLine("-------------------------------------------------------");
 
         for (int i = 0; i < studentCount; i++)
         {
             string status = grades[i] >= 60 ? "Pass" : "Fail";
+            string enrollStatus = enrolled[i] ? "Yes" : "No";
 
-            Console.WriteLine($"{ids[i]}   {names[i]}   {grades[i]}   {status}");
+            Console.WriteLine($"{ids[i],-6} {names[i],-20} {grades[i],-8:F1} {status,-6} {enrollStatus}");
         }
     }
 
@@ -118,6 +138,7 @@ class Program
 
         double total = 0;
 
+        // Use a loop to sum all grades (arithmetic operators)
         for (int i = 0; i < studentCount; i++)
         {
             total += grades[i];
@@ -131,13 +152,17 @@ class Program
     static void FindStudent()
     {
         Console.Write("Enter student ID to search: ");
-        int searchId = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int searchId))
+        {
+            Console.WriteLine("Invalid ID. Please enter a number.");
+            return;
+        }
 
         for (int i = 0; i < studentCount; i++)
         {
             if (ids[i] == searchId)
             {
-                Console.WriteLine($"Found: {names[i]} - Grade: {grades[i]}");
+                Console.WriteLine($"Found: {names[i]} - Grade: {grades[i]} - Enrolled: {enrolled[i]}");
                 return;
             }
         }
@@ -148,15 +173,24 @@ class Program
     static void UpdateGrade()
     {
         Console.Write("Enter student ID: ");
-        int searchId = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int searchId))
+        {
+            Console.WriteLine("Invalid ID. Please enter a number.");
+            return;
+        }
 
         for (int i = 0; i < studentCount; i++)
         {
             if (ids[i] == searchId)
             {
-                Console.Write("Enter new grade: ");
-                grades[i] = double.Parse(Console.ReadLine());
+                Console.Write("Enter new grade (0-100): ");
+                if (!double.TryParse(Console.ReadLine(), out double newGrade) || newGrade < 0 || newGrade > 100)
+                {
+                    Console.WriteLine("Invalid grade. Must be between 0 and 100.");
+                    return;
+                }
 
+                grades[i] = newGrade;
                 Console.WriteLine("Grade updated.");
                 return;
             }
@@ -168,17 +202,23 @@ class Program
     static void DeleteStudent()
     {
         Console.Write("Enter student ID to delete: ");
-        int searchId = int.Parse(Console.ReadLine());
+        if (!int.TryParse(Console.ReadLine(), out int searchId))
+        {
+            Console.WriteLine("Invalid ID. Please enter a number.");
+            return;
+        }
 
         for (int i = 0; i < studentCount; i++)
         {
             if (ids[i] == searchId)
             {
+                // Shift arrays to remove the student
                 for (int j = i; j < studentCount - 1; j++)
                 {
                     names[j] = names[j + 1];
                     ids[j] = ids[j + 1];
                     grades[j] = grades[j + 1];
+                    enrolled[j] = enrolled[j + 1];
                 }
 
                 studentCount--;
@@ -203,7 +243,9 @@ class Program
         double lowest = grades[0];
         int pass = 0;
         int fail = 0;
+        int enrolledCount = 0;
 
+        // Use relational operators (>, <) and logical operators (&&, ||) to calculate stats
         for (int i = 0; i < studentCount; i++)
         {
             if (grades[i] > highest)
@@ -216,11 +258,15 @@ class Program
                 pass++;
             else
                 fail++;
+
+            if (enrolled[i])
+                enrolledCount++;
         }
 
-        Console.WriteLine($"Highest Grade: {highest}");
-        Console.WriteLine($"Lowest Grade: {lowest}");
+        Console.WriteLine($"Highest Grade: {highest:F1}");
+        Console.WriteLine($"Lowest Grade: {lowest:F1}");
         Console.WriteLine($"Passing Students: {pass}");
         Console.WriteLine($"Failing Students: {fail}");
+        Console.WriteLine($"Enrolled Students: {enrolledCount}");
     }
 }
