@@ -1,6 +1,6 @@
 # Student Management System
 
-Name: Daphdelacode
+Name: Mercy Dela
 
 
 ## Description
