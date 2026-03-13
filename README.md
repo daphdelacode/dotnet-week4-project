@@ -1,6 +1,6 @@
 # Student Management System
 
-Name: Mercy Dela
+Name: Mercy Delana
 
 
 ## Description
