@@ -11,21 +11,37 @@ This is a console-based Student Management System built in C#. It allows users t
 3. Run `dotnet run` in the terminal.
 
 ## Features
-- Add new students with name, ID, and grade
-- View all students with pass/fail status
+- Add new students with name, ID, and grade (with validation for positive ID, unique ID, and grade 0-100)
+- View all students with pass/fail status and enrollment status in a formatted table
 - Calculate average grade
 - Find students by ID
-- Update student grades
+- Update student grades (with validation)
 - Delete students
-- Display statistics (highest/lowest grade, pass/fail counts)
+- Display statistics (highest/lowest grade, pass/fail counts, enrolled count)
+
+## Example Usage
+```
+=== Student Management System ===
+1. Add New Student
+...
+Enter your choice: 1
+Enter student name: Alice Johnson
+Enter student ID: 101
+Enter grade (0-100): 85.5
+Student added successfully!
+```
 
 ## Concepts Demonstrated
-- Variables and data types
+- Variables and data types (string, int, double, bool)
 - Arrays for data storage
-- Loops and conditionals
-- Switch statements
-- Input validation and error handling
-- Arithmetic and relational operators
+- Loops (while, for) and conditionals (if-else)
+- Switch statements for menu handling
+- Input validation and error handling with try-catch (TryParse)
+- Arithmetic operators (+, /) and relational operators (>, <, >=)
+- Logical operators (&&, ||) in statistics
+- Assignment operators (=) for updates
 
 ## Challenges Faced
-[Add any challenges you encountered here]
+- Implementing input validation to prevent crashes on invalid inputs.
+- Managing array shifting for deletion without losing data.
+- Ensuring proper formatting for table display.
