@@ -116,15 +116,16 @@ class Program
 
     static void ViewStudents()
     {
-        Console.WriteLine("\nID      Name                Grade     Status    Enrolled");
-        Console.WriteLine("-------------------------------------------------------");
+        Console.WriteLine("\nID      Name                Grade     Status    Enrolled  Letter");
+        Console.WriteLine("-----------------------------------------------------------------");
 
         for (int i = 0; i < studentCount; i++)
         {
             string status = grades[i] >= 60 ? "Pass" : "Fail";
             string enrollStatus = enrolled[i] ? "Yes" : "No";
+            string letterGrade = GetLetterGrade(grades[i]);
 
-            Console.WriteLine($"{ids[i],-6} {names[i],-20} {grades[i],-8:F1} {status,-6} {enrollStatus}");
+            Console.WriteLine($"{ids[i],-6} {names[i],-20} {grades[i],-8:F1} {status,-6} {enrollStatus,-8} {letterGrade}");
         }
     }
 
@@ -162,7 +163,8 @@ class Program
         {
             if (ids[i] == searchId)
             {
-                Console.WriteLine($"Found: {names[i]} - Grade: {grades[i]} - Enrolled: {enrolled[i]}");
+                string letterGrade = GetLetterGrade(grades[i]);
+                Console.WriteLine($"Found: {names[i]} - Grade: {grades[i]} ({letterGrade}) - Enrolled: {enrolled[i]}");
                 return;
             }
         }
@@ -268,5 +270,20 @@ class Program
         Console.WriteLine($"Passing Students: {pass}");
         Console.WriteLine($"Failing Students: {fail}");
         Console.WriteLine($"Enrolled Students: {enrolledCount}");
+    }
+
+    // Helper method to determine letter grade using conditionals
+    static string GetLetterGrade(double grade)
+    {
+        if (grade >= 90)
+            return "A";
+        else if (grade >= 80)
+            return "B";
+        else if (grade >= 70)
+            return "C";
+        else if (grade >= 60)
+            return "D";
+        else
+            return "F";
     }
 }
